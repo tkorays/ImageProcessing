@@ -112,6 +112,7 @@ namespace gray {
 
         private void PointerBtn_Click(object sender, EventArgs e) {
             MessageBox.Show("槽！！不安全的代码！算了~~在C#里面就不折腾指针了!");
+
         }
 
         

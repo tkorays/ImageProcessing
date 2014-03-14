@@ -72,5 +72,48 @@ namespace gray {
                 g.DrawImage(curBitmap, 160, 20, 300, 200);
             }
         }
+        // 好慢啊
+        private void PixBtn_Click(object sender, EventArgs e) {
+            if (curBitmap != null) {
+                Color curColor;
+                int ret;
+                for (int i = 0; i < curBitmap.Width; i++) {
+                    for (int j = 0; j < curBitmap.Height; j++) {
+                        curColor = curBitmap.GetPixel(i, j);
+                        ret = (int)(curColor.R * 0.299 + curColor.G * 0.587 + curColor.B * 0.114);
+                        curBitmap.SetPixel(i, j, Color.FromArgb(ret, ret, ret));
+                    }
+                }
+                Invalidate();
+            }
+        }
+        // 这个效率不错！！！
+        // 把数据复制到内存中，这样可以是程序的运行速度大大提高。
+        private void MemBtn_Click(object sender, EventArgs e) {
+            if (curBitmap!=null) {
+                Rectangle rect = new Rectangle(0, 0, curBitmap.Width, curBitmap.Height);
+                System.Drawing.Imaging.BitmapData bmpDate = curBitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, curBitmap.PixelFormat);
+                IntPtr ptr = bmpDate.Scan0; // 得到首地址
+
+                int bytes = curBitmap.Width * curBitmap.Height * 3; // r g b
+                byte[] rgbValues = new byte[bytes];
+                // 复制被锁定的图像到该数组
+                System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
+                double colorTemp = 0;
+                for (int i = 0; i < rgbValues.Length; i+=3) {
+                    colorTemp = rgbValues[i + 2] * 0.299 + rgbValues[i + 1] * 0.587 + rgbValues[i] * 0.114;
+                    rgbValues[i + 2] = rgbValues[i + 1] = rgbValues[i] = (byte)colorTemp;
+                }
+                System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
+                curBitmap.UnlockBits(bmpDate);
+                Invalidate();
+            }
+        }
+
+        private void PointerBtn_Click(object sender, EventArgs e) {
+            MessageBox.Show("槽！！不安全的代码！算了~~在C#里面就不折腾指针了!");
+        }
+
+        
     }
 }

@@ -5,7 +5,8 @@
 	#include <wx\wx.h>
 #endif
 
-#include <omp.h>
+#include <string>
+#include <sstream>
 
 #include <iostream>
 #include <opencv2\opencv.hpp>

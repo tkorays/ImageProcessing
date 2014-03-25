@@ -54,6 +54,9 @@ void MainFrame::OnTimer(wxTimerEvent& event) {
 	PrepareDC(dc);
 	bgr_frame = cvQueryFrame(capture);
 	Mat client_frame(bgr_frame);
+	stringstream ss;
+	string s;
+	IplImage sm;
 	if (bgr_frame) {
 		if (!haveResized) {
 			this->SetClientSize(bgr_frame->width, bgr_frame->height);
@@ -63,6 +66,16 @@ void MainFrame::OnTimer(wxTimerEvent& event) {
 		for (int i = 0; i < faces.size(); i++) {
 			Point center(faces[i].x + faces[i].width*0.5, faces[i].y + faces[i].height*0.5);
 			rectangle(client_frame, Rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height), Scalar(255, 0, 255) , 3, 8, 0);
+			if (this->count>0) {
+				sm = client_frame(Rect(faces[i].x+3, faces[i].y+3, faces[i].width-6, faces[i].height-6));
+				ss << "./Faces/face_";
+				ss << this->count;
+				ss >> s;
+				s += ".jpg";
+				cvSaveImage(s.data() , &sm);
+				this->count--;
+			} 
+			SetStatusText("Get Faces OK!");
 		}
 		IplImage result_frame = client_frame;
 		wxImage wxImg = wx_from_cv(&result_frame);

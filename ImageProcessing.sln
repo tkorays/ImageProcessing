@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gray", "gray\gray.csproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceDetection", "FaceDetection\FaceDetection.vcxproj", "{B8A85852-81D8-409A-B92C-91E7BD978AA8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PCA_Face", "PCA_Face\PCA_Face.vcxproj", "{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "FaceRecognition\FaceRecognition.vcxproj", "{732F52C5-F485-410D-B38F-586DDD1EE28F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,26 @@ Global
 		{B8A85852-81D8-409A-B92C-91E7BD978AA8}.Release|Win32.Build.0 = Release|Win32
 		{B8A85852-81D8-409A-B92C-91E7BD978AA8}.Release|x64.ActiveCfg = Release|x64
 		{B8A85852-81D8-409A-B92C-91E7BD978AA8}.Release|x64.Build.0 = Release|x64
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Debug|Win32.ActiveCfg = Debug|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Debug|Win32.Build.0 = Debug|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Debug|x64.ActiveCfg = Debug|x64
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Debug|x64.Build.0 = Debug|x64
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Release|Any CPU.ActiveCfg = Release|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Release|Win32.ActiveCfg = Release|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Release|Win32.Build.0 = Release|Win32
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Release|x64.ActiveCfg = Release|x64
+		{16EBA08D-42AA-45B0-BD1A-B56FE8616F52}.Release|x64.Build.0 = Release|x64
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Debug|Win32.Build.0 = Debug|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Debug|x64.ActiveCfg = Debug|x64
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Debug|x64.Build.0 = Debug|x64
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|Win32.ActiveCfg = Release|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|Win32.Build.0 = Release|Win32
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|x64.ActiveCfg = Release|x64
+		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

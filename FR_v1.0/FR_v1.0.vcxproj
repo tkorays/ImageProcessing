@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{732F52C5-F485-410D-B38F-586DDD1EE28F}</ProjectGuid>
+    <ProjectGuid>{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>FaceRecognition</RootNamespace>
+    <RootNamespace>FR_v1_0</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -98,7 +98,6 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <OpenMPSupport>false</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,17 +159,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Face.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainFrame.cpp" />
-    <ClCompile Include="TrainFrame.cpp" />
+    <ClInclude Include="App.h" />
+    <ClInclude Include="conf.h" />
+    <ClInclude Include="inc.h" />
+    <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config.h" />
-    <ClInclude Include="Face.h" />
-    <ClInclude Include="helper.h" />
-    <ClInclude Include="MainFrame.h" />
-    <ClInclude Include="TrainFrame.h" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

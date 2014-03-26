@@ -2,6 +2,14 @@
 #include "helper.h"
 #include "TrainFrame.h"
 
+wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
+EVT_MENU(wxID_EXIT, MainFrame::OnExit)
+EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
+EVT_MENU(ID_Capture, MainFrame::OnCapture)
+EVT_TIMER(wxID_ANY, MainFrame::OnTimer)
+EVT_MENU(ID_TRAIN, MainFrame::OnTrain)
+wxEND_EVENT_TABLE()
+
 MainFrame::MainFrame(const wxString& title, const wxPoint& pos, wxSize& size) : wxFrame(NULL, wxID_ANY, title, pos, size),m_timer(this,100) {
 	this->DesignMenu();
 
@@ -9,6 +17,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, wxSize& size) : 
 	SetStatusText("Ready...");
 	haveResized = false;
 	count = 10;
+	detectCount = 0;
 }
 
 
@@ -46,8 +55,12 @@ void MainFrame::OnAbout(wxCommandEvent& event) {
 }
 void MainFrame::OnCapture(wxCommandEvent& event) {
 	face.LoadCascadeFile(face_cascade_file);
-	capture = cvCreateCameraCapture(0); // Start capture
-	m_timer.Start(300); // do sth every 100 ms
+	if (!(capture = cvCreateCameraCapture(0))) {
+		wxMessageBox("Capture not found!", "Error");
+		Close(true);
+		exit(0);
+	}
+	m_timer.Start(100); // do sth every 100 ms
 }
 void MainFrame::OnTimer(wxTimerEvent& event) {
 	wxClientDC dc(this);
@@ -60,9 +73,12 @@ void MainFrame::OnTimer(wxTimerEvent& event) {
 	if (bgr_frame) {
 		if (!haveResized) {
 			this->SetClientSize(bgr_frame->width, bgr_frame->height);
+			haveResized = true;
 		}
-		
-		faces = face.DetectFace(client_frame);
+		detectCount++;
+		//if (detectCount%30 == 0) {
+			faces = face.DetectFace(client_frame);
+		//}
 		for (int i = 0; i < faces.size(); i++) {
 			Point center(faces[i].x + faces[i].width*0.5, faces[i].y + faces[i].height*0.5);
 			rectangle(client_frame, Rect(faces[i].x, faces[i].y, faces[i].width, faces[i].height), Scalar(255, 0, 255) , 3, 8, 0);

@@ -3,6 +3,7 @@
 #include "Face.h"
 #include "TrainFrame.h"
 
+
 class MainFrame :public wxFrame{
 public:
 	MainFrame(const wxString& title,const wxPoint& pos,wxSize& size);
@@ -23,6 +24,8 @@ private:
 	void saveFace(string path);
 	unsigned int count;
 	TrainFrame* trainFrame;
+	unsigned int detectCount;
 	wxDECLARE_EVENT_TABLE();
 };
+
 

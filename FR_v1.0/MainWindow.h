@@ -5,7 +5,15 @@ public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
 	~MainWindow();
 private:
-	// some methods
+	// vars or methods
+	wxMenuBar* mb;
+	wxToolBar* tb;
+
+	void DesignMenu();
+	void DesignToolBar();
+	void SetStatusBar(wxString st);
+	void OnExit(wxCommandEvent& event);
+	void OnAbout(wxCommandEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
 

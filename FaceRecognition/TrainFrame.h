@@ -1,5 +1,7 @@
 #pragma once
 #include "config.h"
+
+
 class TrainFrame : public wxFrame {
 public:
 	TrainFrame(wxFrame* p, const wxString& title, const wxPoint& pos, wxSize& size);
@@ -11,4 +13,5 @@ private:
 	void OnClose(wxCommandEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
+
 

@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PCA_Face", "PCA_Face\PCA_Fa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceRecognition", "FaceRecognition\FaceRecognition.vcxproj", "{732F52C5-F485-410D-B38F-586DDD1EE28F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FR_v1.0", "FR_v1.0\FR_v1.0.vcxproj", "{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,8 +61,21 @@ Global
 		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|Win32.Build.0 = Release|Win32
 		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|x64.ActiveCfg = Release|x64
 		{732F52C5-F485-410D-B38F-586DDD1EE28F}.Release|x64.Build.0 = Release|x64
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Debug|Win32.Build.0 = Debug|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Debug|x64.ActiveCfg = Debug|x64
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Debug|x64.Build.0 = Debug|x64
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Release|Any CPU.ActiveCfg = Release|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Release|Win32.ActiveCfg = Release|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Release|Win32.Build.0 = Release|Win32
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Release|x64.ActiveCfg = Release|x64
+		{BB0F9CD0-1B54-40A1-B5F6-B2CE6DD5B2A9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

@@ -9,8 +9,14 @@ private:
 	wxMenuBar* mb;
 	wxToolBar* tb;
 
+	static const long ID_STATICTEXT1;
+	static const long ID_STATICTEXT2;
+	static const long ID_STATICTEXT3;
+	static const long ID_STATICBITMAP1;
+
 	void DesignMenu();
 	void DesignToolBar();
+	void DesignClient();
 	void SetStatusBar(wxString st);
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);

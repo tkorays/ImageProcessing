@@ -12,6 +12,9 @@ private:
 	wxTimer m_timer;
 	CvCapture* capture;
 	IplImage* bgr_frame;
+	wxPanel* leftPanel;
+	wxPanel* rightPanel;
+	wxSplitterWindow* spWindow;
 
 	static const long ID_STATICTEXT1;
 	static const long ID_STATICTEXT2;
@@ -23,7 +26,7 @@ private:
 	void DesignClient();
 	void SetStatusBar(wxString st);
 
-	void DrawBitamp(wxStaticBitmap* HBmp,wxBitmap& bmp);
+	void DrawBitamp(wxObject* HBmp,wxBitmap& bmp);
 
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);

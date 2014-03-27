@@ -40,14 +40,14 @@ void MainWindow::DesignMenu() {
 		mb = new wxMenuBar;
 	}
 	wxMenu* menuFile = new wxMenu;
-	menuFile->Append(wxID_ANY, _T("打开"), _T("打开文件"));
+	menuFile->Append(wxID_ANY, _T("打开\tCtrl+O"), _T("打开文件"));
 	menuFile->AppendSeparator();
-	menuFile->Append(wxID_EXIT,_T("退出"));
+	menuFile->Append(wxID_EXIT,_T("退出\tCtrl+E"));
 
 	wxMenu* menuCapture = new wxMenu;
-	menuCapture->Append(ID_MENU_CAP,_T("开始捕获"),_T("从摄像头捕获人脸"));
-	menuCapture->Append(ID_MENU_TRAIN, _T("训练样本"), _T("人工训练样本"));
-	menuCapture->Append(ID_MENU_ADDPEOPLE, _T("信息补全"), _T("补全捕获的人脸信息"));
+	menuCapture->Append(ID_MENU_CAP,_T("开始捕获\tCtrl+S"),_T("从摄像头捕获人脸"));
+	menuCapture->Append(ID_MENU_TRAIN, _T("训练样本\tCtrl+T"), _T("人工训练样本"));
+	menuCapture->Append(ID_MENU_ADDPEOPLE, _T("信息补全\tCtrl+C"), _T("补全捕获的人脸信息"));
 
 	wxMenu* menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
@@ -77,7 +77,7 @@ const long MainWindow::ID_STATICBITMAP1 = wxNewId();
 
 void MainWindow::DesignClient(){
 	
-
+	
 	wxStaticText* StaticText2;
 	wxStaticText* StaticText1;
 	wxStaticText* StaticText3;
@@ -95,54 +95,24 @@ void MainWindow::DesignClient(){
 
 	wxBitmap* bmp = new wxBitmap(_T("./pic.jpg"), wxBITMAP_TYPE_JPEG);
 
-	
-	FlexGridSizer1 = new wxFlexGridSizer(1, 2, 0, 0);
-	FlexGridSizer1->AddGrowableCol(1);
-	FlexGridSizer1->AddGrowableRow(0);
-
-	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+	spWindow = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(600,360), wxSP_3DBORDER | wxSP_3DSASH | wxSP_NO_XP_THEME | wxNO_BORDER);
+	spWindow->SetMinimumPaneSize(0);
+	leftPanel = new wxPanel(spWindow);
+	rightPanel = new wxPanel(spWindow);
+	wxBoxSizer* leftBox = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer* rightBox = new wxBoxSizer(wxHORIZONTAL);
 
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("检测出人脸数:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	BoxSizer4->Add(StaticText1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL , 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("2"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	StaticText2->SetForegroundColour(wxColor("red"));
-	BoxSizer4->Add(StaticText2, 1, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
-	BoxSizer1->Add(BoxSizer4, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+	BoxSizer4->Add(StaticText1, 0, wxALIGN_LEFT | wxALL, 5);
 
-	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("人物显示："), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-	StaticText3->SetForegroundColour(wxColor("red"));
-	BoxSizer3->Add(StaticText3, 1, wxALL | wxALIGN_LEFT , 5);
-	BoxSizer1->Add(BoxSizer3, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+	leftBox->Add(BoxSizer4,wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_LEFT|wxALIGN_RIGHT);
 
-	BoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
-	peopleL_1 = new wxStaticText(this, wxID_ANY, _("徐志博"), wxDefaultPosition, wxSize(50,30), 0, _T("wxID_ANY"));
-	BoxSizer5->Add(peopleL_1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	wxBitmap* pp_1 = new wxBitmap(_T("xzb.jpg"), wxBITMAP_TYPE_JPEG);
-	peopleP_1 = new wxStaticBitmap(this, wxID_ANY | wxALIGN_CENTER_VERTICAL, *pp_1, wxDefaultPosition, wxDefaultSize, 0, _T("wxID_ANY"));
-	BoxSizer5->Add(peopleP_1, 1, wxALL | wxALIGN_LEFT, 5);
-	BoxSizer1->Add(BoxSizer5, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+	
+	leftPanel->SetSizer(leftBox);
+	rightPanel->SetSizer(rightBox);
 
-	BoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-	peopleL_2 = new wxStaticText(this, wxID_ANY, _("徐志博"), wxDefaultPosition, wxSize(50, 30), 0, _T("wxID_ANY"));
-	BoxSizer6->Add(peopleL_2, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	wxBitmap* pp_2 = new wxBitmap(_T("xzb.jpg"), wxBITMAP_TYPE_JPEG);
-	peopleP_2 = new wxStaticBitmap(this, wxID_ANY | wxALIGN_CENTER_VERTICAL, *pp_2, wxDefaultPosition, wxDefaultSize, 0, _T("wxID_ANY"));
-	BoxSizer6->Add(peopleP_2, 1, wxALL | wxALIGN_LEFT, 5);
-	BoxSizer1->Add(BoxSizer6, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
-
-
-
-	FlexGridSizer1->Add(BoxSizer1, 1, wxALL | wxALIGN_TOP| wxALIGN_LEFT, 5);
-	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	captureBmp = new wxStaticBitmap(this, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, wxSize(500,400)/*bmp->GetSize()*/ , 0, _T("ID_STATICBITMAP1"));
-	//captureBmp->SetBitmap(*bmp);
-	BoxSizer2->Add(captureBmp, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer1->Add(BoxSizer2, 1, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 0);
-	SetSizer(FlexGridSizer1);
-	FlexGridSizer1->Fit(this);
-	FlexGridSizer1->SetSizeHints(this);
+	spWindow->SplitVertically(leftPanel, rightPanel, 200);
 	
 }
 void MainWindow::SetStatusBar(wxString st) {
@@ -151,9 +121,9 @@ void MainWindow::SetStatusBar(wxString st) {
 	}
 	this->SetStatusText(st);
 }
-
-void MainWindow::DrawBitamp(wxStaticBitmap* HBmp, wxBitmap& bmp){
-	wxClientDC dc(HBmp);
+// 绘制，参数默认为wxWindow以及其子类
+void MainWindow::DrawBitamp(wxObject* HBmp, wxBitmap& bmp){
+	wxClientDC dc((wxWindow*)HBmp);
 	PrepareDC(dc);
 	dc.DrawBitmap(bmp, 0, 0);
 }
@@ -186,6 +156,15 @@ void MainWindow::OnTimer(wxTimerEvent& event){
 		wxMessageBox(_T("视频帧读取错误！"), _T("错误"));
 		Close(true);
 	}
+	if (rightPanel->GetSize().GetWidth()<bgr_frame->width)
+	{
+		
+		spWindow->SetSize(200 + bgr_frame->width, bgr_frame->height);
+		rightPanel->SetSize(bgr_frame->width, bgr_frame->height);
+		this->SetSize(200 + bgr_frame->width, bgr_frame->height + 120);
+		Refresh();
+	}
+	
 	wxBitmap b = wxBitmap(wx_from_cv(bgr_frame));
-	this->DrawBitamp(captureBmp, b);
+	this->DrawBitamp(rightPanel, b);
 }

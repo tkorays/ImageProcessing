@@ -5,6 +5,12 @@
 #include <wx\wx.h>
 #endif
 
+#include <wx\splitter.h>
+#include <wx\html\htmlwin.h>
+#include <wx\frame.h>
+#include <wx\toolbar.h>
+#include <wx\statusbr.h>
+
 #include <wx/artprov.h>
 #include <wx/bitmap.h>
 #include <wx/intl.h>

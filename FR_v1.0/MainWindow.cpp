@@ -15,13 +15,14 @@ EVT_MENU(wxID_ABOUT,MainWindow::OnAbout)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, wxSize& size)\
-	: wxFrame(NULL, wxID_ANY, title, pos, size, wxDEFAULT_FRAME_STYLE&~wxMAXIMIZE_BOX) {
+	: wxFrame(NULL, wxID_ANY, title, pos, size, wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE_BOX & ~wxRESIZE_BORDER) {
 	wxInitAllImageHandlers();
 	this->DesignMenu();
 	this->DesignToolBar();
 	this->DesignClient();
-	this->SetStatusBar("ready...");
+	this->SetStatusBar(_T("就绪..."));
 	this->SetIcon(wxIcon(_T("opencv.ico"),wxBITMAP_TYPE_ICO));
+	
 }
 
 
@@ -76,11 +77,16 @@ void MainWindow::DesignClient(){
 	wxStaticText* StaticText1;
 	wxStaticText* StaticText3;
 
+	wxStaticText* peopleL_1; wxStaticBitmap* peopleP_1;
+	wxStaticText* peopleL_2; wxStaticBitmap* peopleP_2;
+
 	wxBoxSizer* BoxSizer4;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer1;
 	wxBoxSizer* BoxSizer3;
+	wxBoxSizer* BoxSizer5;
+	wxBoxSizer* BoxSizer6;
 
 	wxBitmap* bmp = new wxBitmap(_T("./pic.jpg"), wxBITMAP_TYPE_JPEG);
 
@@ -88,18 +94,42 @@ void MainWindow::DesignClient(){
 	FlexGridSizer1 = new wxFlexGridSizer(1, 2, 0, 0);
 	FlexGridSizer1->AddGrowableCol(1);
 	FlexGridSizer1->AddGrowableRow(0);
+
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
+
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	BoxSizer4->Add(StaticText1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	BoxSizer4->Add(StaticText2, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer1->Add(BoxSizer4, 1, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("检测出人脸数:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+	BoxSizer4->Add(StaticText1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL , 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("2"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	StaticText2->SetForegroundColour(wxColor("red"));
+	BoxSizer4->Add(StaticText2, 1, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
+	BoxSizer1->Add(BoxSizer4, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Label"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
-	BoxSizer3->Add(StaticText3, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer1->Add(BoxSizer3, 1, wxALL | wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer1->Add(BoxSizer1, 1, wxALL | wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL, 5);
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("人物显示："), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+	StaticText3->SetForegroundColour(wxColor("red"));
+	BoxSizer3->Add(StaticText3, 1, wxALL | wxALIGN_LEFT , 5);
+	BoxSizer1->Add(BoxSizer3, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+
+	BoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
+	peopleL_1 = new wxStaticText(this, wxID_ANY, _("徐志博"), wxDefaultPosition, wxSize(50,30), 0, _T("wxID_ANY"));
+	BoxSizer5->Add(peopleL_1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+	wxBitmap* pp_1 = new wxBitmap(_T("xzb.jpg"), wxBITMAP_TYPE_JPEG);
+	peopleP_1 = new wxStaticBitmap(this, wxID_ANY | wxALIGN_CENTER_VERTICAL, *pp_1, wxDefaultPosition, wxDefaultSize, 0, _T("wxID_ANY"));
+	BoxSizer5->Add(peopleP_1, 1, wxALL | wxALIGN_LEFT, 5);
+	BoxSizer1->Add(BoxSizer5, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+
+	BoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
+	peopleL_2 = new wxStaticText(this, wxID_ANY, _("徐志博"), wxDefaultPosition, wxSize(50, 30), 0, _T("wxID_ANY"));
+	BoxSizer6->Add(peopleL_2, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+	wxBitmap* pp_2 = new wxBitmap(_T("xzb.jpg"), wxBITMAP_TYPE_JPEG);
+	peopleP_2 = new wxStaticBitmap(this, wxID_ANY | wxALIGN_CENTER_VERTICAL, *pp_2, wxDefaultPosition, wxDefaultSize, 0, _T("wxID_ANY"));
+	BoxSizer6->Add(peopleP_2, 1, wxALL | wxALIGN_LEFT, 5);
+	BoxSizer1->Add(BoxSizer6, 0, wxALL | wxALIGN_LEFT | wxALIGN_TOP, 5);
+
+
+
+	FlexGridSizer1->Add(BoxSizer1, 1, wxALL | wxALIGN_TOP| wxALIGN_LEFT, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	StaticBitmap1 = new wxStaticBitmap(this, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, bmp->GetSize() , 0, _T("ID_STATICBITMAP1"));
 	StaticBitmap1->SetBitmap(*bmp);
@@ -122,5 +152,5 @@ void MainWindow::OnExit(wxCommandEvent& event) {
 	Close(true);
 }
 void MainWindow::OnAbout(wxCommandEvent& event) {
-	wxMessageBox("content!", "title");
+	wxMessageBox(_T("人脸检测与识别"), _T("关于"));
 }

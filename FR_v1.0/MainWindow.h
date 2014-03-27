@@ -8,6 +8,10 @@ private:
 	// vars or methods
 	wxMenuBar* mb;
 	wxToolBar* tb;
+	wxStaticBitmap* captureBmp;
+	wxTimer m_timer;
+	CvCapture* capture;
+	IplImage* bgr_frame;
 
 	static const long ID_STATICTEXT1;
 	static const long ID_STATICTEXT2;
@@ -18,8 +22,13 @@ private:
 	void DesignToolBar();
 	void DesignClient();
 	void SetStatusBar(wxString st);
+
+	void DrawBitamp(wxStaticBitmap* HBmp,wxBitmap& bmp);
+
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnStart(wxCommandEvent& event);
+	void OnTimer(wxTimerEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
 

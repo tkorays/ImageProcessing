@@ -1,21 +1,27 @@
 ﻿#include "MainWindow.h"
+#include "helper.h"
 
 enum {
 	ID_MENU_CAP = 1,
 	ID_MENU_ADDPEOPLE =2,
 	ID_MENU_TRAIN = 3,
-	ID_TOOL_CAP = 4,
+	ID_TOOL_START = 4,
 	ID_TOOL_TRAIN = 5,
-	ID_TOOL_ADDPEOPLE =6
+	ID_TOOL_ADDPEOPLE =6,
+	ID_TOOL_EXIT = 7
 };
 
 wxBEGIN_EVENT_TABLE(MainWindow,wxFrame)
 EVT_MENU(wxID_EXIT,MainWindow::OnExit)
 EVT_MENU(wxID_ABOUT,MainWindow::OnAbout)
+EVT_TOOL(ID_TOOL_START,MainWindow::OnStart)
+EVT_TOOL(ID_TOOL_EXIT, MainWindow::OnExit)
+EVT_TIMER(wxID_ANY,MainWindow::OnTimer)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, wxSize& size)\
-	: wxFrame(NULL, wxID_ANY, title, pos, size, wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE_BOX & ~wxRESIZE_BORDER) {
+	: wxFrame(NULL, wxID_ANY, title, pos, size, wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE_BOX & ~wxRESIZE_BORDER),\
+	m_timer(this,100){
 	wxInitAllImageHandlers();
 	this->DesignMenu();
 	this->DesignToolBar();
@@ -57,10 +63,10 @@ void MainWindow::DesignToolBar() {
 		tb = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL | wxNO_BORDER, _T("toolbar"));
 	}
 	tb->AddTool(wxID_ANY, _("打开文件"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_FILE_OPEN")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("打开文件"), _T("打开文件"));
-	tb->AddTool(ID_TOOL_CAP, _("开始捕获"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_GO_FORWARD")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("开始捕获"), _T("开始从摄像头捕获人脸"));
+	tb->AddTool(ID_TOOL_START, _("开始捕获"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_GO_FORWARD")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("开始捕获"), _T("开始从摄像头捕获人脸"));
 	tb->AddTool(ID_TOOL_TRAIN, _("训练样本"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_TIP")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("训练样本"), _T("训练样本"));
 	tb->AddTool(ID_TOOL_ADDPEOPLE, _("添加信息"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_ADD_BOOKMARK")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("添加信息"), _T("添加信息"));
-	tb->AddTool(wxID_ANY, _("退出"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_QUIT")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("退出"), _T("退出程序"));
+	tb->AddTool(ID_TOOL_EXIT, _("退出"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_QUIT")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("退出"), _T("退出程序"));
 	tb->Realize();
 	SetToolBar(tb);
 }
@@ -73,7 +79,6 @@ void MainWindow::DesignClient(){
 	
 
 	wxStaticText* StaticText2;
-	wxStaticBitmap* StaticBitmap1;
 	wxStaticText* StaticText1;
 	wxStaticText* StaticText3;
 
@@ -131,9 +136,9 @@ void MainWindow::DesignClient(){
 
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL | wxALIGN_TOP| wxALIGN_LEFT, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
-	StaticBitmap1 = new wxStaticBitmap(this, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, bmp->GetSize() , 0, _T("ID_STATICBITMAP1"));
-	StaticBitmap1->SetBitmap(*bmp);
-	BoxSizer2->Add(StaticBitmap1, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
+	captureBmp = new wxStaticBitmap(this, ID_STATICBITMAP1, wxNullBitmap, wxDefaultPosition, wxSize(500,400)/*bmp->GetSize()*/ , 0, _T("ID_STATICBITMAP1"));
+	//captureBmp->SetBitmap(*bmp);
+	BoxSizer2->Add(captureBmp, 1, wxALL | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL | wxEXPAND | wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL, 0);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
@@ -147,10 +152,40 @@ void MainWindow::SetStatusBar(wxString st) {
 	this->SetStatusText(st);
 }
 
+void MainWindow::DrawBitamp(wxStaticBitmap* HBmp, wxBitmap& bmp){
+	wxClientDC dc(HBmp);
+	PrepareDC(dc);
+	dc.DrawBitmap(bmp, 0, 0);
+}
 
 void MainWindow::OnExit(wxCommandEvent& event) {
+	if (m_timer.IsRunning()){
+		m_timer.Stop();
+	}
+	cvReleaseCapture(&capture);
+	wxMessageBox(_T("正在退出..."), _T("提示"));
 	Close(true);
+	exit(0);
 }
 void MainWindow::OnAbout(wxCommandEvent& event) {
 	wxMessageBox(_T("人脸检测与识别"), _T("关于"));
+}
+void MainWindow::OnStart(wxCommandEvent& event){
+	if (!(capture = cvCreateCameraCapture(0)))
+	{
+		wxMessageBox(_T("打开默认摄像头错误！"), _T("错误"));
+		Close(true);
+		exit(0);
+	}
+	wxMessageBox(_T("正在捕捉..."), _T("提示"));
+	m_timer.Start(100);
+}
+void MainWindow::OnTimer(wxTimerEvent& event){
+	if (!(bgr_frame = cvQueryFrame(capture)))
+	{
+		wxMessageBox(_T("视频帧读取错误！"), _T("错误"));
+		Close(true);
+	}
+	wxBitmap b = wxBitmap(wx_from_cv(bgr_frame));
+	this->DrawBitamp(captureBmp, b);
 }

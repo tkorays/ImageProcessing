@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="conf.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="inc.h" />
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>

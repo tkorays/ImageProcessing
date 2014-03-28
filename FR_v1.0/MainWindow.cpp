@@ -192,6 +192,7 @@ void MainWindow::OnTimer(wxTimerEvent& event){
 	this->DrawBitamp(rightPanel, b);
 }
 void MainWindow::OnTrain(wxCommandEvent& event) {
+	m_timer.Stop();
 	tWindow = new TrainWindow(this, _T("训练"), wxPoint(800,40), wxSize(600,480));
 	tWindow->Show();
 }

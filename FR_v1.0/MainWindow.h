@@ -6,12 +6,12 @@ class MainWindow : public wxFrame {
 public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
 	~MainWindow();
+	wxTimer m_timer;
 private:
 	// vars or methods
 	wxMenuBar* mb;
 	wxToolBar* tb;
 	wxStaticBitmap* captureBmp;
-	wxTimer m_timer;
 	CvCapture* capture;
 	IplImage* bgr_frame;
 	wxPanel* leftPanel;

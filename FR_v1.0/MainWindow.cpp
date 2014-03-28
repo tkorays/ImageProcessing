@@ -1,5 +1,6 @@
 ﻿#include "MainWindow.h"
 #include "helper.h"
+#include "conf.h"
 
 enum {
 	ID_MENU_CAP = 1,
@@ -141,9 +142,15 @@ void MainWindow::OnAbout(wxCommandEvent& event) {
 	wxMessageBox(_T("人脸检测与识别"), _T("关于"));
 }
 void MainWindow::OnStart(wxCommandEvent& event){
-	if (!(capture = cvCreateCameraCapture(0)))
+	// 成功打开摄像头且加载了文件
+	if (!(capture = cvCreateCameraCapture(0)) || !peopleFace.LoadCascadeFile(face_cascade_file))
 	{
-		wxMessageBox(_T("打开默认摄像头错误！"), _T("错误"));
+		if (!capture) {
+			wxMessageBox(_T("打开默认摄像头错误！"), _T("错误"));
+		} 
+		if(!peopleFace.isOK) {
+			wxMessageBox(_T("文件加载错误！"), _T("错误"));
+		}
 		Close(true);
 		exit(0);
 	}
@@ -164,7 +171,24 @@ void MainWindow::OnTimer(wxTimerEvent& event){
 		this->SetSize(200 + bgr_frame->width, bgr_frame->height + 120);
 		Refresh();
 	}
-	
-	wxBitmap b = wxBitmap(wx_from_cv(bgr_frame));
+	Mat mat_frame(bgr_frame);
+	faces = peopleFace.DetectFaces(mat_frame);
+	// TODO 核心部分需要编写
+	// 检测出是谁？ string = Face::Recoginze(faces);
+	// 认识则显示，不认识则保存图像 face_count++;
+	// 在很短时间内捕获20张图片，一般来说是同一个人的.
+	if (peopleFace.single_face_count<20) {
+		for (size_t i = 0; i < faces.size(); i++) {
+			stringstream ss;
+			ss << SAVE_PATH << peopleFace.single_face_count << ".jpg";
+			string s; ss >> s;
+			peopleFace.SaveFace(mat_frame, Rect(faces[i].x + 3, faces[i].y + 3, faces[i].width - 6, faces[i].height - 6), s.data());
+		}
+	}
+	// 写入图像显示
+	peopleFace.HighLightFace(mat_frame, faces);
+	m_timer.Stop();
+	IplImage result = mat_frame;
+	wxBitmap b = wxBitmap(wx_from_cv(&result));
 	this->DrawBitamp(rightPanel, b);
 }

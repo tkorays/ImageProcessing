@@ -1,5 +1,6 @@
 #pragma once
 #include "inc.h"
+#include "Face.h"
 class MainWindow : public wxFrame {
 public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
@@ -15,7 +16,10 @@ private:
 	wxPanel* leftPanel;
 	wxPanel* rightPanel;
 	wxSplitterWindow* spWindow;
+	Face peopleFace;
+	vector<Rect> faces;
 
+	// TODO: DELETE STH.
 	static const long ID_STATICTEXT1;
 	static const long ID_STATICTEXT2;
 	static const long ID_STATICTEXT3;

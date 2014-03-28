@@ -1,6 +1,8 @@
 #pragma once
 #include "inc.h"
 
+// TODO： 需要优化
+
 // from internet
 void copy_and_swap_rb(char *s, char *d, int size) {
 	// Copy image data source s to destination d, swapping R and B channels.

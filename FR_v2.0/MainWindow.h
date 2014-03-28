@@ -1,5 +1,7 @@
 #pragma once
 #include "inc.h"
+#include "conf.h"
+#include "Face.h"
 class MainWindow : public wxFrame {
 public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
@@ -19,6 +21,16 @@ public:
 	wxMenu* menuHelp;
 	wxStatusBar* statusBar;
 	wxToolBarToolBase* tbItemTrain;
+	wxTextCtrl* peopleName;
+	wxStaticText* resultName;
+
+	wxTimer m_timer;
+	CvCapture* capture;
+	IplImage* bgr_frame;
+	Face peopleFace;
+	vector<Rect> faces;
+
+	unsigned int picCount;
 
 protected:
 	static const long ID_MENU_OPEN;
@@ -42,6 +54,10 @@ private:
 	void OnRecog(wxCommandEvent& event);
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnTimer(wxTimerEvent& event);
+	void OnClose(wxCloseEvent& event);
+
+	void DrawBitamp(wxObject* HBmp, wxBitmap& bmp);
 	wxDECLARE_EVENT_TABLE();
 };
 

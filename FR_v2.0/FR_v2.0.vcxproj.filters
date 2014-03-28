@@ -27,12 +27,21 @@
     <ClInclude Include="MainWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Face.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Face.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

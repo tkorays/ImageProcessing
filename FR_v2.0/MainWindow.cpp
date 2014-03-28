@@ -1,4 +1,5 @@
 ﻿#include "MainWindow.h"
+#include "helper.h"
 
 const long MainWindow::ID_MENU_OPEN = wxNewId();
 const long MainWindow::ID_STATUSBAR = wxNewId();
@@ -17,11 +18,15 @@ EVT_TOOL(MainWindow::ID_TOOL_START,MainWindow::OnStart)
 EVT_TOOL(MainWindow::ID_TOOL_SAVEFRAME,MainWindow::OnSaveFrame)
 EVT_TOOL(MainWindow::ID_TOOL_TRAIN,MainWindow::OnTrain)
 EVT_TOOL(MainWindow::ID_TOOL_RECOG,MainWindow::OnRecog)
+EVT_TIMER(wxID_ANY, MainWindow::OnTimer)
+EVT_CLOSE(MainWindow::OnClose)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, wxSize& size) : wxFrame(NULL, wxID_ANY, title, pos, size,\
-	wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE_BOX & ~wxRESIZE_BORDER) {
+	wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE_BOX & ~wxRESIZE_BORDER),\
+	m_timer(this, 100) {
 	Design();
+	picCount = 0;
 }
 
 
@@ -56,7 +61,93 @@ void MainWindow::Design() {
 	tbItemTrain = tb->AddTool(ID_TOOL_TRAIN, _T("训练"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_TIP")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("训练数据"), _T("开始训练人脸识别"));
 	tbItemRecog = tb->AddTool(ID_TOOL_RECOG, _T("识别"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_FIND")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("识别人脸"), _T("识别人脸"));
 	tbItemExit = tb->AddTool(ID_TOOL_EXIT, _T("退出"), wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(_T("wxART_QUIT")), wxART_TOOLBAR), wxNullBitmap, wxITEM_NORMAL, _T("退出程序"), _T("退出"));
+	peopleName = new wxTextCtrl(tb, wxID_ANY, _T("PEOPLE_1"), wxDefaultPosition, wxDefaultSize, 0);
+	tb->AddControl(new wxStaticText(tb, wxID_ANY, _T("姓名:  ")));
+	tb->AddControl(peopleName);
+	tb->AddControl(new wxStaticText(tb, wxID_ANY, _T("    检测结果:  ")));
+	resultName = new wxStaticText(tb, wxID_ANY, _T("无"));
+	tb->AddControl(resultName);
 	tb->Realize();
 	SetToolBar(tb);
 }
 
+void MainWindow::OnStart(wxCommandEvent& event) {
+	// 成功打开摄像头且加载了文件
+	if (!(capture = cvCreateCameraCapture(0)) || !peopleFace.LoadCascadeFile(face_cascade_file)) {
+		if (!capture) {
+			wxMessageBox(_T("打开默认摄像头错误！"), _T("错误"));
+		}
+		if ( !peopleFace.isOK ){
+		} else {
+			wxMessageBox(_T("文件加载错误！"), _T("错误"));
+		}
+		Close(true);
+		exit(0);
+	}
+	m_timer.Start(100);
+}
+void MainWindow::OnSaveFrame(wxCommandEvent& event) {
+	wxString name = peopleName->GetLineText(1).Trim();
+	if (name.IsEmpty()) {
+		wxMessageBox(_T("请填写人名"),_T("错误！"));
+		return;
+	}//else
+	
+	wxString path = CURRENT_DIR + name;
+	if (!wxDirExists(path)) {
+		wxMkDir(path);
+	}
+	if (!(bgr_frame = cvQueryFrame(capture))) {
+		wxMessageBox(_T("请点击开始，启动视频！"), _T("错误"));
+		return;
+	}
+	string fullPath = path.ToStdString();
+	stringstream ss;
+	ss << fullPath << "/" << picCount << ".jpg";
+	fullPath.clear();
+	ss >> fullPath;
+	cvSaveImage(fullPath.data(), bgr_frame);
+	picCount++;
+	wxMessageBox(_T("ok"), _T("ok"));
+}
+void MainWindow::OnTrain(wxCommandEvent& event) {
+
+}
+void MainWindow::OnRecog(wxCommandEvent& event) {
+
+}
+void MainWindow::OnExit(wxCommandEvent& event) {
+	m_timer.IsRunning() ? m_timer.Stop() : 0;
+	cvReleaseCapture(&capture);
+	Close(true);
+	exit(0);
+}
+void MainWindow::OnAbout(wxCommandEvent& event) {
+	wxMessageBox(_T("人脸检测程序by tkorays."), _T("关于"));
+}
+void MainWindow::OnClose(wxCloseEvent& event) {
+	m_timer.IsRunning() ? m_timer.Stop() : 0;
+	cvReleaseCapture(&capture);
+	exit(0);
+}
+void MainWindow::OnTimer(wxTimerEvent& event) {
+	if (!(bgr_frame = cvQueryFrame(capture))) {
+		wxMessageBox(_T("视频帧读取错误！"), _T("错误"));
+		Close(true);
+	}
+	if (GetClientSize().GetWidth()<bgr_frame->width || GetClientSize().GetHeight()<bgr_frame->height) {
+		SetSize(bgr_frame->width, bgr_frame->height);
+	}
+	Mat mat_frame(bgr_frame);
+	faces = peopleFace.DetectFaces(mat_frame);
+	peopleFace.HighLightFace(mat_frame, faces);
+	IplImage result = mat_frame;
+	wxBitmap b = wxBitmap(wx_from_cv(&result));
+	this->DrawBitamp(this, b);
+}
+
+void MainWindow::DrawBitamp(wxObject* HBmp, wxBitmap& bmp) {
+	wxClientDC dc((wxWindow*)HBmp);
+	PrepareDC(dc);
+	dc.DrawBitmap(bmp, 0, 0);
+}

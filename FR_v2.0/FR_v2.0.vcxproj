@@ -161,11 +161,14 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="conf.h" />
+    <ClInclude Include="Face.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="inc.h" />
     <ClInclude Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Face.cpp" />
     <ClCompile Include="MainWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

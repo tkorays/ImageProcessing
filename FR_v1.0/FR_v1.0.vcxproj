@@ -165,11 +165,13 @@
     <ClInclude Include="helper.h" />
     <ClInclude Include="inc.h" />
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="TrainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="TrainWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

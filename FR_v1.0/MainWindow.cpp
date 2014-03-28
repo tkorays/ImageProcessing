@@ -17,6 +17,7 @@ EVT_MENU(wxID_EXIT,MainWindow::OnExit)
 EVT_MENU(wxID_ABOUT,MainWindow::OnAbout)
 EVT_TOOL(ID_TOOL_START,MainWindow::OnStart)
 EVT_TOOL(ID_TOOL_EXIT, MainWindow::OnExit)
+EVT_TOOL(ID_TOOL_TRAIN,MainWindow::OnTrain)
 EVT_TIMER(wxID_ANY,MainWindow::OnTimer)
 wxEND_EVENT_TABLE()
 
@@ -71,16 +72,13 @@ void MainWindow::DesignToolBar() {
 	tb->Realize();
 	SetToolBar(tb);
 }
-const long MainWindow::ID_STATICTEXT1 = wxNewId();
-const long MainWindow::ID_STATICTEXT2 = wxNewId();
-const long MainWindow::ID_STATICTEXT3 = wxNewId();
-const long MainWindow::ID_STATICBITMAP1 = wxNewId();
+
 
 void MainWindow::DesignClient(){
 	
 	
 	wxStaticText* StaticText2;
-	wxStaticText* StaticText1;
+	wxStaticText* LB1;
 	wxStaticText* StaticText3;
 
 	wxStaticText* peopleL_1; wxStaticBitmap* peopleP_1;
@@ -104,9 +102,10 @@ void MainWindow::DesignClient(){
 	wxBoxSizer* rightBox = new wxBoxSizer(wxHORIZONTAL);
 
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("检测出人脸数:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
-	BoxSizer4->Add(StaticText1, 0, wxALIGN_LEFT | wxALL, 5);
-
+	LB1 = new wxStaticText(this, wxID_ANY, _T("检测出人脸数: "), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+	faces_count_label = new wxStaticText(this, wxID_ANY, _T("0"), wxDefaultPosition, wxDefaultSize);
+	BoxSizer4->Add(LB1, 0, wxALIGN_LEFT | wxALL, 5);
+	BoxSizer4->Add(faces_count_label, 0, wxALIGN_LEFT | wxALL, 5);
 	leftBox->Add(BoxSizer4,wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_LEFT|wxALIGN_RIGHT);
 
 	
@@ -187,8 +186,12 @@ void MainWindow::OnTimer(wxTimerEvent& event){
 	}
 	// 写入图像显示
 	peopleFace.HighLightFace(mat_frame, faces);
-	m_timer.Stop();
+	//m_timer.Stop();
 	IplImage result = mat_frame;
 	wxBitmap b = wxBitmap(wx_from_cv(&result));
 	this->DrawBitamp(rightPanel, b);
+}
+void MainWindow::OnTrain(wxCommandEvent& event) {
+	tWindow = new TrainWindow(this, _T("训练"), wxPoint(800,40), wxSize(600,480));
+	tWindow->Show();
 }

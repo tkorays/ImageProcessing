@@ -1,6 +1,7 @@
 #pragma once
 #include "inc.h"
 #include "Face.h"
+#include "TrainWindow.h"
 class MainWindow : public wxFrame {
 public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
@@ -19,11 +20,10 @@ private:
 	Face peopleFace;
 	vector<Rect> faces;
 
-	// TODO: DELETE STH.
-	static const long ID_STATICTEXT1;
-	static const long ID_STATICTEXT2;
-	static const long ID_STATICTEXT3;
-	static const long ID_STATICBITMAP1;
+	wxStaticText* faces_count_label;
+
+	TrainWindow* tWindow;
+	
 
 	void DesignMenu();
 	void DesignToolBar();
@@ -36,6 +36,7 @@ private:
 	void OnAbout(wxCommandEvent& event);
 	void OnStart(wxCommandEvent& event);
 	void OnTimer(wxTimerEvent& event);
+	void OnTrain(wxCommandEvent& event);
 	wxDECLARE_EVENT_TABLE();
 };
 

@@ -32,7 +32,8 @@ public:
 	Face peopleFace;
 	vector<Rect> faces;
 
-	
+	vector<Mat> testimg;
+	vector<int> labels;
 
 	unsigned int picCount;
 

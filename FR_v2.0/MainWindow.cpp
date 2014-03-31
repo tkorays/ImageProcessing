@@ -11,9 +11,6 @@ const long MainWindow::ID_TOOL_RECOG = wxNewId();
 const long MainWindow::ID_TOOL_EXIT = wxNewId();
 const long MainWindow::ID_TOOLBAR = wxNewId();
 
-vector<Mat> testimg;
-vector<int> labels;
-
 
 wxBEGIN_EVENT_TABLE(MainWindow,wxFrame)
 EVT_TOOL(MainWindow::ID_TOOL_EXIT,MainWindow::OnExit)
@@ -181,13 +178,18 @@ void MainWindow::OnTrain(wxCommandEvent& event) {
 			small_pic = tmp + face;
 			if (picfaces.size()>0) {
 				peopleFace.SaveFace(gray_img, Rect(picfaces[0].x, picfaces[0].y, 256, 256), small_pic.data());
+				IplImage* sv = cvCreateImage(cvSize(256,256), gray_img.depth(), gray_img.channels());
+				cvReleaseImage(&sv);
+				sv = cvCloneImage(&(IplImage)gray_img);
 				Mat saveimg = gray_img(Rect(picfaces[0].x, picfaces[0].y, 256, 256));
 				//testimg.push_back(saveimg);
 				Mat dst;
 				cv::normalize(saveimg, dst, 0, 255, 4, CV_8UC1);
-				testimg.push_back(dst);;
+				testimg.push_back(sv);;
 				int m = pname == "PEOPLE_1" ? 0 : 1;
 				labels.push_back(m);
+				
+				delete sv;
 				//peopleFace.SaveFace(img, Rect(picfaces[0].x + picfaces[0].width*0.5 - 128, picfaces[0].y + picfaces[0].height*0.5 - 128, 256, 256), small_pic.data());
 			}
 		}

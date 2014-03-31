@@ -27,6 +27,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, wxSize& size) 
 	m_timer(this, 100) {
 	Design();
 	picCount = 0;
+	this->SetIcon(wxIcon(_T("opencv.ico"), wxBITMAP_TYPE_ICO));
 }
 
 
@@ -124,96 +125,122 @@ void MainWindow::OnSaveFrame(wxCommandEvent& event) {
 	fclose(facelist);
 }
 void MainWindow::OnTrain(wxCommandEvent& event) {
-	// 截图保存,存入该人的目录下的small目录
-	
-	FILE* f = fopen("./Data/peoplelist.txt", "r");
-	FILE* facelist = 0;
-	if (!f) {
-		wxMessageBox(_T("列表文件不存在"), _T("提示"));
-		return;
-	}// 文件存在
-	char s[256];
-	int count=0;
-	char c;
-	string pname;
-	string path = "";
-	string tmp = "";
-	ifstream fs;
-	char face[20];
-	Mat img,gray_img;
-	vector<Rect> picfaces;
-	string slash = "/";
-	string small_pic;
-	path += CURRENT_DIR;
-	while (!feof(f)) {
-		while ((c = fgetc(f)), c != '\n') {
-			if (feof(f)) {
-				break;
-			}
-			s[count++] = c;
-		}
-		s[count] = '\0';
-		if (s[0] == '\0') {
+	m_timer.Stop();
+	ifstream pList("./Data/peoplelist.txt"); // 打开people列表文件
+	ifstream imgList;
+	char pLine[20]; // 人
+	char iLine[20]; // 图片
+	Mat orgImg, grayImg; // 原始图片，灰度图片
+	vector<Rect> facesInPic;
+	string sline,sline_1; // stringline char[]转string
+	string tmp;
+	Mat curImg,stdImg(cvSize(256,256),1);
+	int lblInt=0;// 标签
+	// 一个人一个人地来,两层循环
+	while (!pList.eof()) {
+		pList.getline(pLine,20); // 获取一个人放在line中
+		sline = pLine; //放到string中便于操作 
+		if (sline.empty()) {
 			break;
 		}
-		count = 0;
-		// 已经获取一行
-		pname = s;
-		if (wxFileExists(path + s + "/small")) {
-			wxRmDir(path + s + "/small");
+		// 设置小图片存放目录
+		tmp = "./Data/" + sline + "/small/";
+		if (!wxDirExists(tmp)) {
+			wxMkDir(tmp); // 删除原有的small文件夹
 		}
-		wxMkDir(path + s + "/small");
-		// 存入小图片切片
-		tmp = ""; tmp += path; tmp += s; tmp += "/list.txt";
-		fs.open(tmp.data());
-		tmp = ""; tmp += path; tmp += s; tmp += "/small/"; 
-		// 从list文件中获取所有图片名称
-		while (fs.getline(face, 20)) {
-			img = cv::imread(path + s + slash + face);
-			cvtColor(img, gray_img, CV_BGR2GRAY);
-			if (peopleFace.isOK) {} else {
+		//wxMkdir("./Data/" + sline + "/small/"); 
+		// 创建新的文件夹
+		// 读取含有人脸图片列表读取图片,得到小图
+		imgList.open("./Data/" + sline + "/list.txt", ios::in); // 打开该人的目录读取图片列表
+		while (!imgList.eof()) { // 循环读取所有图片
+			imgList.getline(iLine, 20);
+			sline_1 = iLine; // 得到一张图片名称
+			if (sline_1.empty()) {
+				break;
+			}
+			orgImg = imread("./Data/" + sline + "/" + sline_1); // 读取图片
+			cvtColor(orgImg, grayImg, CV_BGR2GRAY);
+			if (peopleFace.isOK) {} else { // 加载人脸检测文件
 				peopleFace.LoadCascadeFile(face_cascade_file);
 			}
-			picfaces = peopleFace.DetectFaces(img);
-			small_pic = tmp + face;
-			if (picfaces.size()>0) {
-				peopleFace.SaveFace(gray_img, Rect(picfaces[0].x, picfaces[0].y, 256, 256), small_pic.data());
-				IplImage* sv = cvCreateImage(cvSize(256,256), gray_img.depth(), gray_img.channels());
-				cvReleaseImage(&sv);
-				sv = cvCloneImage(&(IplImage)gray_img);
-				Mat saveimg = gray_img(Rect(picfaces[0].x, picfaces[0].y, 256, 256));
-				//testimg.push_back(saveimg);
-				Mat dst;
-				cv::normalize(saveimg, dst, 0, 255, 4, CV_8UC1);
-				testimg.push_back(sv);;
-				int m = pname == "PEOPLE_1" ? 0 : 1;
-				labels.push_back(m);
-				
-				delete sv;
-				//peopleFace.SaveFace(img, Rect(picfaces[0].x + picfaces[0].width*0.5 - 128, picfaces[0].y + picfaces[0].height*0.5 - 128, 256, 256), small_pic.data());
+			facesInPic.clear();
+			facesInPic = peopleFace.DetectFaces(orgImg); // 得到图像中人脸坐标
+			// 取第一个人脸，尽量保证训练时只有一个人脸
+			if (facesInPic.size()>0) {
+				curImg = grayImg(Rect(facesInPic[0].x, facesInPic[0].y, facesInPic[0].width, facesInPic[0].height));
+				//cvResize(&curImg, &stdImg, CV_INTER_AREA);
+				cv::resize(curImg,curImg,cvSize(256,256));
+				tmp = "./Data/" + sline + "/small/" + sline_1; // 灰度小图保存路径
+				peopleFace.SaveFace(curImg, Rect(0,0,256,256), tmp.data()); // 保存小图
+				// 接下来时训练时刻，擦亮眼睛看吧
+				testimg.push_back(curImg);
+				labels.push_back(lblInt);
 			}
 		}
+		imgList.close();
+		lblInt++; // 按列表人名
 		
-
-		fs.close();
 	}
-	fclose(f);
-
 	peopleFace.model = createEigenFaceRecognizer(10);
 	peopleFace.model->train(testimg, labels);
+
 	wxMessageBox(_T("训练成功！"), _T("提示"));
+	m_timer.Start(100);
 }
 void MainWindow::OnRecog(wxCommandEvent& event) {
 	if (!(bgr_frame = cvQueryFrame(capture))) {
 		wxMessageBox(_T("请点击开始，启动视频！"), _T("错误"));
 		return;
 	}//else
-	Mat thefaace = bgr_frame;
-	Mat thegray;
-	cvtColor(thefaace, thegray, CV_BGR2GRAY);
-	int who = peopleFace.model->predict(thegray);
-	wxMessageBox(_T("这个傻逼是："), _T("识别结果："));
+	if (peopleFace.model.empty()) {
+		wxMessageBox(_T("数据尚未训练！"), _T("错误"));
+		return;
+	}
+	m_timer.Stop();
+	Mat theface = bgr_frame;
+	// 得到人脸部分
+	if (peopleFace.isOK) {} else { // 加载人脸检测文件
+		peopleFace.LoadCascadeFile(face_cascade_file);
+	}
+	vector<Rect> fc = peopleFace.DetectFaces(theface);
+	if (fc.size()<=0) {
+		wxMessageBox(_T("镜头内没有任何人，或者识别不到！"), _T("提醒"));
+		m_timer.Start(100);
+		return;
+	}//else
+	int whoisu=0; string tmp;
+	Mat thegray;// = theface(fc[0]);
+	cvtColor(theface, theface, CV_BGR2GRAY);
+	thegray = theface(Rect(fc[0].x, fc[0].y, fc[0].width, fc[0].height));
+	cv::resize(thegray, thegray, cvSize(256, 256));
+	whoisu = peopleFace.model->predict(thegray);
+
+
+	ifstream fs("./Data/peoplelist.txt");
+	int count=0;
+	char line[20];
+	string sline;
+	while (!fs.eof()) {
+		fs.getline(line, 20);
+		sline = line;
+		if (count == whoisu) {
+			break;
+		} // else
+		if (sline.empty()) {
+			wxMessageBox(_T("没有找到信息，你可能删掉了文件或者修改了？"),_T("提醒"));
+			m_timer.Start(100);
+			return;
+		}
+		count++;
+	}
 	
+	stringstream ss;
+	ss << "Detected! ----> ";
+	ss << sline;
+	ss >> tmp;
+	tmp = "Detected! ----> " + sline;
+	wxMessageBox(tmp, _T("识别结果："));
+	m_timer.Start(100);
 }
 void MainWindow::OnExit(wxCommandEvent& event) {
 	m_timer.IsRunning() ? m_timer.Stop() : 0;

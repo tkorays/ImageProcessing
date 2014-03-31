@@ -14,7 +14,7 @@ Face::~Face()
 
 bool Face::LoadCascadeFile(string filePath){
 	if (face_cascade.load(filePath)){
-		isOK = true;
+		isOK = true;	
 	}else{
 		isOK = false;
 	}

@@ -12,6 +12,7 @@ public:
 	bool SaveFace(Mat face_img,Rect r,const char* savePath);
 	unsigned int face_count;
 	unsigned int single_face_count;
+	Ptr<FaceRecognizer> model;
 private:
 	CascadeClassifier face_cascade;
 };

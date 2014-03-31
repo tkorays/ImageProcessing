@@ -11,6 +11,9 @@ const long MainWindow::ID_TOOL_RECOG = wxNewId();
 const long MainWindow::ID_TOOL_EXIT = wxNewId();
 const long MainWindow::ID_TOOLBAR = wxNewId();
 
+vector<Mat> testimg;
+vector<int> labels;
+
 
 wxBEGIN_EVENT_TABLE(MainWindow,wxFrame)
 EVT_TOOL(MainWindow::ID_TOOL_EXIT,MainWindow::OnExit)
@@ -170,13 +173,21 @@ void MainWindow::OnTrain(wxCommandEvent& event) {
 		// 从list文件中获取所有图片名称
 		while (fs.getline(face, 20)) {
 			img = cv::imread(path + s + slash + face);
+			cvtColor(img, gray_img, CV_BGR2GRAY);
 			if (peopleFace.isOK) {} else {
 				peopleFace.LoadCascadeFile(face_cascade_file);
 			}
 			picfaces = peopleFace.DetectFaces(img);
 			small_pic = tmp + face;
 			if (picfaces.size()>0) {
-				peopleFace.SaveFace(img, Rect(picfaces[0].x, picfaces[0].y, 256, 256), small_pic.data());
+				peopleFace.SaveFace(gray_img, Rect(picfaces[0].x, picfaces[0].y, 256, 256), small_pic.data());
+				Mat saveimg = gray_img(Rect(picfaces[0].x, picfaces[0].y, 256, 256));
+				//testimg.push_back(saveimg);
+				Mat dst;
+				cv::normalize(saveimg, dst, 0, 255, 4, CV_8UC1);
+				testimg.push_back(dst);;
+				int m = pname == "PEOPLE_1" ? 0 : 1;
+				labels.push_back(m);
 				//peopleFace.SaveFace(img, Rect(picfaces[0].x + picfaces[0].width*0.5 - 128, picfaces[0].y + picfaces[0].height*0.5 - 128, 256, 256), small_pic.data());
 			}
 		}
@@ -185,10 +196,22 @@ void MainWindow::OnTrain(wxCommandEvent& event) {
 		fs.close();
 	}
 	fclose(f);
+
+	peopleFace.model = createEigenFaceRecognizer(10);
+	peopleFace.model->train(testimg, labels);
 	wxMessageBox(_T("训练成功！"), _T("提示"));
 }
 void MainWindow::OnRecog(wxCommandEvent& event) {
-
+	if (!(bgr_frame = cvQueryFrame(capture))) {
+		wxMessageBox(_T("请点击开始，启动视频！"), _T("错误"));
+		return;
+	}//else
+	Mat thefaace = bgr_frame;
+	Mat thegray;
+	cvtColor(thefaace, thegray, CV_BGR2GRAY);
+	int who = peopleFace.model->predict(thegray);
+	wxMessageBox(_T("这个傻逼是："), _T("识别结果："));
+	
 }
 void MainWindow::OnExit(wxCommandEvent& event) {
 	m_timer.IsRunning() ? m_timer.Stop() : 0;

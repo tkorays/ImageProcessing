@@ -20,6 +20,8 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
+#include <vector>
 
 #include <iostream>
 #include <opencv2\opencv.hpp>

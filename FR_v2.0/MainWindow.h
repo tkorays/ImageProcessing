@@ -2,6 +2,8 @@
 #include "inc.h"
 #include "conf.h"
 #include "Face.h"
+
+
 class MainWindow : public wxFrame {
 public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
@@ -30,6 +32,9 @@ public:
 	Face peopleFace;
 	vector<Rect> faces;
 
+	vector<Mat> testimg;
+	vector<int> labels;
+
 	unsigned int picCount;
 
 protected:
@@ -44,7 +49,7 @@ protected:
 	static const long ID_TOOLBAR;
 
 private:
-
+	
 	// some methods
 	void Design();
 

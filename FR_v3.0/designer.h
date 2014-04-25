@@ -2,9 +2,9 @@
 /*
 	设计界面
 */
+#include "inc.h"
 
-
-class Designer {
+class Designer{
 private:
 	wxWindow* parent;
 
@@ -20,7 +20,9 @@ private:
 	void design_statusbar();
 	void design_client();
 	void reset_window();
-	void OnClose(wxCloseEvent& event) { wxMessageBox("ff", "ffads"); }
+	
+	void show_allpeople(wxListBox* sampleListBox);
+
 public:
 	Designer(wxWindow* p);
 	wxMenuBar* get_menubar();

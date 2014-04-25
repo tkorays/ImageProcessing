@@ -2,12 +2,9 @@
 #include "designer.h"
 #include "helper.h"
 
-enum {
-	ID_MENU_FILE_OPEN = 1,
-	ID_MENU_EXIT =2,
-	ID_STATUSBAR =3,
-	ID_TOOLBAR = 4
-};
+#include "id_all.h"
+
+
 
 Designer::Designer(wxWindow* p) {
 	parent = p;
@@ -86,9 +83,23 @@ void Designer::design_client() {
 	wxPanel* samPanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL);
 	samPanel->SetSizer(new wxBoxSizer(wxVERTICAL));
 	wxArrayString* sampleList = new wxArrayString();
-	//sampleList->Add(_T("徐志博"));
-	//sampleList->Add(_T("胡锦涛"));
 	wxListBox* sampleListBox = new wxListBox(samPanel, wxID_ANY, wxDefaultPosition, wxSize(client_width-4,300), *sampleList, wxLB_SINGLE | wxNO_BORDER);
+	show_allpeople(sampleListBox); // 显示所有的人列表
+	notebook->AddPage(samPanel, _T("所有样本"));
+	
+
+	wxPanel* managePanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,  wxNO_BORDER | wxTAB_TRAVERSAL);
+	managePanel->SetSizer(new wxBoxSizer(wxVERTICAL));
+	notebook->AddPage(managePanel, _T("工具箱"));
+	
+	wxBitmap* bmp = new wxBitmap("./4.jpg", wxBITMAP_TYPE_JPEG);
+	wxStaticBitmap* vedio = new wxStaticBitmap(lwin_2, wxID_ANY, *bmp, wxDefaultPosition, wxDefaultSize ,0);
+	
+	lwin->SplitHorizontally(lwin_1, lwin_2, 300);
+	spwin->SplitVertically(lwin, rwin, 250);
+}
+
+void Designer::show_allpeople(wxListBox* sampleListBox) {
 	sqlite3* conn = NULL;
 	char* errMsg = NULL;
 	char sql[256];
@@ -98,19 +109,4 @@ void Designer::design_client() {
 	sprintf(sql, "select * from people");
 	sqlite3_exec(conn, sql, &get_people_call_back, (void*)sampleListBox, &errMsg);
 	sqlite3_close(conn);
-	notebook->AddPage(samPanel, _T("所有样本"));
-	
-
-	wxPanel* managePanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize,  wxNO_BORDER | wxTAB_TRAVERSAL);
-	managePanel->SetSizer(new wxBoxSizer(wxVERTICAL));
-	notebook->AddPage(managePanel, _T("管理样本"));
-	
-	wxBitmap* bmp = new wxBitmap("./4.jpg", wxBITMAP_TYPE_JPEG);
-	wxStaticBitmap* vedio = new wxStaticBitmap(lwin_2, wxID_ANY, *bmp, wxDefaultPosition, wxDefaultSize ,0);
-	
-	lwin->SplitHorizontally(lwin_1, lwin_2, 300);
-	spwin->SplitVertically(lwin, rwin, 250);
-
-	
-	
 }

@@ -85,7 +85,7 @@ void MainWindow::OnStart(wxCommandEvent& event) {
 		Close(true);
 		exit(0);
 	}
-	m_timer.Start(100);
+	m_timer.Start(100); 
 }
 void MainWindow::OnSaveFrame(wxCommandEvent& event) {
 	wxString name = peopleName->GetLineText(1).Trim();

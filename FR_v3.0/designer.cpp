@@ -1,5 +1,6 @@
 #include "inc.h"
 #include "designer.h"
+#include "helper.h"
 
 enum {
 	ID_MENU_FILE_OPEN = 1,
@@ -84,16 +85,19 @@ void Designer::design_client() {
 
 	wxPanel* samPanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL);
 	samPanel->SetSizer(new wxBoxSizer(wxVERTICAL));
-	wxArrayString sampleList;
-	sampleList.Add(_T("ÐìÖ¾²©"));
-	sampleList.Add(_T("ºú½õÌÎ"));
-	sampleList.Add(_T("ÀîÏþºì"));
-	sampleList.Add(_T("ÁèÓÀÇå"));
-	sampleList.Add(_T("ÐìÖ¾²©"));
-	sampleList.Add(_T("ºú½õÌÎ"));
-	sampleList.Add(_T("ÀîÏþºì"));
-	sampleList.Add(_T("ÁèÓÀÇå"));
-	wxListBox* sampleListBox = new wxListBox(samPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, sampleList, wxLB_SINGLE | wxNO_BORDER);
+	wxArrayString* sampleList = new wxArrayString();
+	//sampleList->Add(_T("ÐìÖ¾²©"));
+	//sampleList->Add(_T("ºú½õÌÎ"));
+	wxListBox* sampleListBox = new wxListBox(samPanel, wxID_ANY, wxDefaultPosition, wxSize(client_width-4,300), *sampleList, wxLB_SINGLE | wxNO_BORDER);
+	sqlite3* conn = NULL;
+	char* errMsg = NULL;
+	char sql[256];
+	if (SQLITE_OK != sqlite3_open("fr.s3db", &conn)) {
+		wxMessageBox("open error", "error");
+	}
+	sprintf(sql, "select * from people");
+	sqlite3_exec(conn, sql, &get_people_call_back, (void*)sampleListBox, &errMsg);
+	sqlite3_close(conn);
 	notebook->AddPage(samPanel, _T("ËùÓÐÑù±¾"));
 	
 
@@ -106,4 +110,7 @@ void Designer::design_client() {
 	
 	lwin->SplitHorizontally(lwin_1, lwin_2, 300);
 	spwin->SplitVertically(lwin, rwin, 250);
+
+	
+	
 }

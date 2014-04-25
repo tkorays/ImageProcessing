@@ -3,6 +3,7 @@
 	设计界面
 */
 
+
 class Designer {
 private:
 	wxWindow* parent;
@@ -26,4 +27,6 @@ public:
 	wxToolBar* get_toolbar();
 	wxStatusBar* get_statusbar();
 	void run_design();
+	
 };
+

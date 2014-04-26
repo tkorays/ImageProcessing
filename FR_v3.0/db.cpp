@@ -53,7 +53,7 @@ vector<wxString> get_pic_list(int userid) {
 		wxMessageBox(wxString(errMsg), _T("Êý¾Ý¿â¶ÁÈ¡´íÎó£¡"));
 	}
 	sprintf(sql, "select * from pface where pid=%d",userid); // sqlÓï¾ä
-	sqlite3_exec(conn, sql, &get_people_list_callback, (void*)&piclist, &errMsg);
+	sqlite3_exec(conn, sql, &get_pic_list_callback, (void*)&piclist, &errMsg);
 	sqlite3_close(conn);
 	return piclist;
 }

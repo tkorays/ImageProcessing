@@ -1,4 +1,5 @@
 #include "evthandler.h"
+#include "db.h"
 #include "id_all.h"
 
 
@@ -16,5 +17,8 @@ void EvtHandler::OnAbout(wxCommandEvent& event) {
 }
 
 void EvtHandler::OnSelectPeople(wxCommandEvent& event) {
-	wxMessageBox(_T("小混蛋点击了")+event.GetString(), _T("提示"));
+	int index = get_people_id(event.GetString());
+	char s[10];
+	_itoa(index, s, 10);
+	wxMessageBox(_T("小混蛋点击了")+event.GetString()+_T("序号")+wxString(s), _T("提示"));
 }

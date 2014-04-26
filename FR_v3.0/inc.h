@@ -31,5 +31,3 @@
 
 using namespace std;
 using namespace cv;
-
-#include "sqlite3.h"

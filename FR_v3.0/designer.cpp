@@ -4,8 +4,6 @@
 #include "id_all.h"
 #include "db.h"
 
-
-
 Designer::Designer(wxWindow* p) {
 	parent = p;
 	mbar = new wxMenuBar();

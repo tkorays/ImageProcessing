@@ -10,6 +10,7 @@ public:
 	MainWindow(const wxString& title, const wxPoint& pos, wxSize& size);
 	~MainWindow();
 private:
+	void bind_event();
 	// some methods
 	wxDECLARE_EVENT_TABLE();
 };

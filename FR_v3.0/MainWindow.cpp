@@ -11,8 +11,13 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, wxSize& size) 
 	wxInitAllImageHandlers();
 	designer = new Designer(this);
 	designer->run_design();
+	bind_event();
 }
-
+// 动态事件绑定
+void MainWindow::bind_event() {
+	Connect(ID_PEOPLE_LIST, wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler(EvtHandler::OnSelectPeople));
+}
 
 MainWindow::~MainWindow() {
 }
+

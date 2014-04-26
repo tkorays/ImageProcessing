@@ -14,3 +14,7 @@ void EvtHandler::OnExit(wxCommandEvent& event) {
 void EvtHandler::OnAbout(wxCommandEvent& event) {
 	wxMessageBox("人脸识别程序！", "信息");
 }
+
+void EvtHandler::OnSelectPeople(wxCommandEvent& event) {
+	wxMessageBox(_T("小混蛋点击了")+event.GetString(), _T("提示"));
+}

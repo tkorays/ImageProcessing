@@ -11,6 +11,7 @@ public:
 
 	void OnExit(wxCommandEvent& event);
 	void OnAbout(wxCommandEvent& event);
+	void OnSelectPeople(wxCommandEvent& event);
 
 private:
 	wxDECLARE_EVENT_TABLE();

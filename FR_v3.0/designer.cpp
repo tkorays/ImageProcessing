@@ -83,7 +83,7 @@ void Designer::design_client() {
 	wxPanel* samPanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER | wxTAB_TRAVERSAL);
 	samPanel->SetSizer(new wxBoxSizer(wxVERTICAL));
 	wxArrayString* sampleList = new wxArrayString();
-	wxListBox* sampleListBox = new wxListBox(samPanel, wxID_ANY, wxDefaultPosition, wxSize(client_width-4,300), *sampleList, wxLB_SINGLE | wxNO_BORDER);
+	wxListBox* sampleListBox = new wxListBox(samPanel, ID_PEOPLE_LIST, wxDefaultPosition, wxSize(client_width - 4, 300), *sampleList, wxLB_SINGLE | wxNO_BORDER);
 	show_allpeople(sampleListBox); // 显示所有的人列表
 	notebook->AddPage(samPanel, _T("所有样本"));
 	

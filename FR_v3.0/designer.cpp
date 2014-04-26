@@ -93,8 +93,17 @@ void Designer::design_client() {
 	wxBitmap* bmp = new wxBitmap("./4.jpg", wxBITMAP_TYPE_JPEG);
 	wxStaticBitmap* vedio = new wxStaticBitmap(lwin_2, wxID_ANY, *bmp, wxDefaultPosition, wxDefaultSize ,0);
 	
+	design_main_client(rwin); // 设置右边的主要客户区
+
 	lwin->SplitHorizontally(lwin_1, lwin_2, 300);
 	spwin->SplitVertically(lwin, rwin, 250);
+}
+void Designer::design_main_client(wxWindow* win) {
+	wxSplitterWindow* sw_r = (wxSplitterWindow*)win;
+	wxSplitterWindow* win_up = new wxSplitterWindow(sw_r, wxID_ANY, wxDefaultPosition, wxSize(sw_r->GetMaxWidth(), 450), wxSP_NO_XP_THEME | wxNO_BORDER);
+	wxSplitterWindow* win_down = new wxSplitterWindow(sw_r, wxID_ANY, wxDefaultPosition, wxSize(sw_r->GetMaxWidth(),sw_r->GetMinHeight()- 450), wxSP_NO_XP_THEME | wxNO_BORDER);
+	sw_r->SplitHorizontally(win_up, win_down, 300);
+	
 }
 
 void Designer::show_allpeople(wxListBox* sampleListBox) {

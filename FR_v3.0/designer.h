@@ -20,6 +20,7 @@ private:
 	void design_statusbar();
 	void design_client();
 	void reset_window();
+	void design_main_client(wxWindow* win);
 	
 	void show_allpeople(wxListBox* sampleListBox);
 

@@ -14,7 +14,7 @@
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/image.h>
-//#include <wx/listctrl.h>
+#include <wx/listctrl.h>
 #include <wx/event.h>
 #include <wx/eventfilter.h>
 //#include <wx/frame.h>

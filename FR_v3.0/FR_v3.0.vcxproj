@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="db.h" />
     <ClInclude Include="id_all.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="conf.h" />
@@ -166,11 +167,13 @@
     <ClInclude Include="evthandler.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="inc.h" />
+    <ClInclude Include="kvpair.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="sqlite3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="db.cpp" />
     <ClCompile Include="designer.cpp" />
     <ClCompile Include="evthandler.cpp" />
     <ClCompile Include="helper.cpp" />

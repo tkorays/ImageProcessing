@@ -1,8 +1,8 @@
 #include "inc.h"
 #include "designer.h"
 #include "helper.h"
-
 #include "id_all.h"
+#include "db.h"
 
 
 
@@ -100,13 +100,8 @@ void Designer::design_client() {
 }
 
 void Designer::show_allpeople(wxListBox* sampleListBox) {
-	sqlite3* conn = NULL;
-	char* errMsg = NULL;
-	char sql[256];
-	if (SQLITE_OK != sqlite3_open("fr.s3db", &conn)) {
-		wxMessageBox("open error", "error");
+	vector<kvpair<int, wxString>> people_list = get_people_list();
+	for (size_t i = 0; i < people_list.size(); i++) {
+		sampleListBox->Append(people_list[i].value);
 	}
-	sprintf(sql, "select * from people");
-	sqlite3_exec(conn, sql, &get_people_call_back, (void*)sampleListBox, &errMsg);
-	sqlite3_close(conn);
 }

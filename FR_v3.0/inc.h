@@ -23,6 +23,8 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+
 
 #include <iostream>
 #include <opencv2\opencv.hpp>
